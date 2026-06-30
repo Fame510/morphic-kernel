@@ -18,6 +18,7 @@
     "sandbox", "zero-trust", "provenance", "express", "agents"
   ],
   "license": "Apache-2.0",
+  "author": "Dante Bullock (Sovereign Logic)",
   "dependencies": {
     "express": "^4.19.2",
     "nanoid": "^5.0.7",
