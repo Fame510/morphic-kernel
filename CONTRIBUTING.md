@@ -2,6 +2,9 @@
 
 Thanks for your interest in Morphic Kernel.
 
+## Authorship
+Morphic Kernel is authored and maintained solely by **Dante Bullock (Sovereign Logic)**.
+
 ## Ground rules
 - Keep claims honest. If something is a prototype, label it a prototype.
 - New runtime features that execute code must go through `sandboxEvaluator` (core)
