@@ -1,0 +1,27 @@
+services:
+  morphic-kernel:
+    build: .
+    container_name: morphic-kernel
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - OWNER_KEY=${OWNER_KEY:-sovereign::local}
+    volumes:
+      - morphic-data:/app/.morphic_data
+      - morphic-ledger:/app/.morphic_ledger
+      - morphic-modules:/app/modules
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1G
+
+volumes:
+  morphic-data:
+  morphic-ledger:
+  morphic-modules:
