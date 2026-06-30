@@ -96,7 +96,11 @@ export class IntentParserV2 {
       scores[domain] = score;
     }
     const maxScore = Math.max(...Object.values(scores));
-    const detectedDomain = Object.entries(scores).find(([, s]) => s === maxScore)?.[0] || 'backend';
+    // Zero-signal intents must NOT collapse to the first-declared domain (quantum/extreme).
+    // Default a featureless intent to a generic backend module (medium complexity).
+    const detectedDomain = maxScore > 0
+      ? (Object.entries(scores).find(([, s]) => s === maxScore)?.[0] || 'backend')
+      : 'backend';
     return {
       name: detectedDomain,
       confidence: maxScore > 0 ? Math.min(maxScore / 15, 0.99) : 0.3,
