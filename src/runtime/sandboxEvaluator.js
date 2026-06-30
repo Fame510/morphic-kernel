@@ -1,18 +1,28 @@
 // morphicKernel/runtime/sandboxEvaluator.js
 // Validates a generated bundle inside an isolated worker thread + VM context.
 // No network, no process.env, no fs access is exposed to evaluated code.
+// The only module the sandbox may require is 'express', and it is resolved from
+// the host project's node_modules (not the worker script's tmp location).
 import { Worker } from 'worker_threads';
 import path from 'path';
 import os from 'os';
 import fs from 'fs';
+import { pathToFileURL } from 'url';
 
 const WORKER_SCRIPT = `
-const { parentPort } = require('worker_threads');
+const { parentPort, workerData } = require('worker_threads');
 const vm = require('vm');
+const { createRequire } = require('module');
+const path = require('path');
+
+// Resolve allowed modules from the HOST project root, not this worker's tmp dir.
+const projectRoot = (workerData && workerData.projectRoot) || process.cwd();
+const hostRequire = createRequire(path.join(projectRoot, 'package.json'));
+
 parentPort.on('message', ({ code }) => {
   try {
     const sandboxRequire = (name) => {
-      if (name === 'express') return require('express');
+      if (name === 'express') return hostRequire('express');
       throw new Error('Forbidden require: ' + name);
     };
     const context = {
@@ -43,7 +53,7 @@ function _ensureWorkerScript() {
 export async function evaluateBundleSafely(bundleCode) {
   const scriptPath = _ensureWorkerScript();
   return new Promise((resolve, reject) => {
-    const w = new Worker(scriptPath);
+    const w = new Worker(scriptPath, { workerData: { projectRoot: process.cwd() } });
     const timeout = setTimeout(() => {
       w.terminate();
       reject(new Error('SandboxTimeout'));
