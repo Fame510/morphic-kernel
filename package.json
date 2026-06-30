@@ -1,0 +1,36 @@
+{
+  "name": "morphic-kernel",
+  "version": "0.1.0",
+  "description": "Zero-trust, hot-swappable runtime for AI-generated code modules: deterministic constraint collapse (QEC), sandboxed validation, atomic zero-downtime hot-swap, and a hash-chained provenance ledger.",
+  "type": "module",
+  "main": "src/kernel.js",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node src/kernel.js",
+    "dev": "node --watch src/kernel.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "bench": "node benchmarks/swapBenchmark.js",
+    "lint": "echo \"(add eslint config if desired)\" && exit 0"
+  },
+  "keywords": [
+    "hot-swap", "runtime", "microkernel", "ai-generated-code",
+    "sandbox", "zero-trust", "provenance", "express", "agents"
+  ],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "express": "^4.19.2",
+    "nanoid": "^5.0.7",
+    "dotenv": "^16.4.5"
+  },
+  "optionalDependencies": {
+    "socket.io": "^4.7.5",
+    "chokidar": "^3.6.0",
+    "@babel/parser": "^7.24.0",
+    "@babel/traverse": "^7.24.0",
+    "better-sqlite3": "^11.0.0"
+  },
+  "devDependencies": {
+    "vitest": "^1.6.0"
+  }
+}
