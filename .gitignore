@@ -1,0 +1,8 @@
+node_modules/
+.morphic_data/
+.morphic_ledger/
+modules/*.autobundle.cjs
+benchmark-results.json
+*.log
+.env
+.DS_Store
